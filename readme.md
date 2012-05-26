@@ -8,3 +8,7 @@ This solution demonstrates the functionality of HTML5 WebSockets through a node.
 2. Host index.html under IIS / Apache
 3. For testing purposes, open 3 browser windows and navigate to http://localhost
 4. Start playing with the messages, inspect with Fiddler,  and check the node console!
+
+## Further reading: ##
+
+[HTML5 WebSockets / node.js and socket.io on Windows] (http://cosmi.nu/html5-websockets-node-js-and-socket-io-on-windows/98)
