@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src='http://localhost:8889/socket.io/socket.io.js'></script>
+	</head>
+	<body>
+		<script>
+			var HTML5 = {};
+			HTML5.socketio = {
+				socket : null,
+				
+				initialize : function() {
+					//Socket.IO
+					HTML5.socketio.socket = io.connect('http://localhost:8889');
+					
+					//Listener for intercepting server connect
+					HTML5.socketio.socket.on('connect', function() {
+						HTML5.socketio.log('Client connected to the Server! <br />');
+					});
+					
+					//Listener for intercepting server message
+					HTML5.socketio.socket.on('message', function(data) {
+						HTML5.socketio.log('Message from Server:  ' + data + '<br />');
+					});
+					
+					//Listener for intercepting server custom message
+					HTML5.socketio.socket.on('customMessageResponse', function(data) {
+						HTML5.socketio.log('Custom message from Server: ' + data + '<br />');
+					});
+					
+					//Listener for intercepting server disconnect
+					HTML5.socketio.socket.on('disconnect', function() {
+						HTML5.socketio.log('Client disconnected from the Server! <br />');
+					});
+
+					//Send message event handler
+					document.querySelector('#sendMes').onclick = function() {
+						HTML5.socketio.sendMessageToServer(document.querySelector('#mes').value);
+						document.querySelector('#mes').value = '';
+					};
+					
+					//Send custom message event handler
+					document.querySelector('#sendCustMes').onclick = function() {
+						HTML5.socketio.emitCustomMessageToServer(document.querySelector('#custMes').value);
+						document.querySelector('#custMes').value = '';
+					};
+				},
+				
+				//Sends a message to the Server
+				sendMessageToServer : function(data) {
+					HTML5.socketio.socket.send(data);
+					HTML5.socketio.log('Message to Server: ' + data + '<br />');
+				},
+				
+				//Emits a custom message to the Server
+				emitCustomMessageToServer : function(data) {
+					HTML5.socketio.socket.emit('customMessage', data);
+					HTML5.socketio.log('Custom message to Server: ' + data + '<br />');
+				},
+				
+				log : function(message) {
+					document.querySelector('#log').innerHTML += message;
+				}
+			}		
+		</script>
+		
+		<div id='log'></div>
+		<input type='text' id='mes' />
+		<button type='button' id='sendMes'>Send Message!</button>
+		<br />
+		<input type='text' id='custMes' />
+		<button type='button' id='sendCustMes'>Send CustomMessage!</button>
+		
+		<script>
+			HTML5.socketio.initialize();
+		</script>
+	</body>
+</html>
